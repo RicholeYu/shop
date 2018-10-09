@@ -1,6 +1,6 @@
 const MongoClient = require('mongodb').MongoClient;
 const url = 'mongodb://root:ddainn1314@35.200.61.173:27017/';
-MongoClient.connect(url, function(err, db) {
+MongoClient.connect(url, { useNewUrlParser: true }, function(err, db) {
   if (err) throw err;
   console.log('数据库已创建');
   const dbo = db.db('shop');
