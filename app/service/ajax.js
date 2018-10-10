@@ -1,0 +1,27 @@
+const Service = require("egg").Service
+const errorId = {
+    "注册信息验证不通过": 1001,
+    "已拥有该用户名": 1002,
+    "注册失败": 1003,
+}
+class Response extends Service {
+    error(message, errorId) {
+        this.ctx.response.body = {
+            "success": false,
+            "data": {},
+            message,
+            errorId,
+        }
+    }
+    success(json = {}) {
+        this.ctx.response.body = {
+            "success": true,
+            "data": json,
+        }
+    }
+    errorId(msg) {
+        return errorId[msg] || "1000"
+    }
+}
+
+module.exports = Response
