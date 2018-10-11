@@ -6,16 +6,16 @@ class UserController extends Controller {
         const data = this.ctx.request.body
         const isRightSignUpParam = checkSignUpParam(data)
         if (this.ctx.sesion && this.ctx.session.ck) {
-            this.ctx.service.ajax.error("你已登录", this.ctx.service.ajax.errorId("注册信息验证不通过"))
+            this.ctx.service.ajax.error("你已登录", 1000) // this.ctx.service.ajax.errorId("注册信息验证不通过")
             return
         }
         if (isRightSignUpParam !== true) {
-            this.ctx.service.ajax.error(isRightSignUpParam, this.ctx.service.ajax.errorId("注册信息验证不通过"))
+            this.ctx.service.ajax.error(isRightSignUpParam, 1000) // this.ctx.service.ajax.errorId("注册信息验证不通过")
             return
         }
         const isHasSameName = await this.hasThisName(data.username)
         if (isHasSameName) {
-            this.ctx.service.ajax.error("已拥有该用户名", this.ctx.service.ajax.errorId("已拥有该用户名"))
+            this.ctx.service.ajax.error("已拥有该用户名", 1001) // this.ctx.service.ajax.errorId("已拥有该用户名")
             return
         }
         const isCreateSuccess = await this.createAccount(data)
@@ -24,15 +24,16 @@ class UserController extends Controller {
                 "message": "注册成功",
             })
         } else {
-            this.ctx.service.ajax.error("注册失败", this.ctx.service.ajax.errorId("注册失败"))
+            this.ctx.service.ajax.error("注册失败", 1002) // this.ctx.service.ajax.errorId("注册失败")
         }
     }
 
     async signIn() {
+        console.log(arguments)
         const data = this.ctx.request.body
         const isRightSignInParam = checkSignInParam(data)
         if (isRightSignInParam !== true) {
-            this.ctx.service.ajax.error(isRightSignInParam, this.ctx.service.ajax.errorId("请输入正确的登录信息"))
+            this.ctx.service.ajax.error(isRightSignInParam, 1003) // this.ctx.service.ajax.errorId("请输入正确的登录信息")
             return
         }
         const account = await this.signInAccount(data)
@@ -46,7 +47,7 @@ class UserController extends Controller {
                 "ck": this.ctx.session.ck,
             })
         } else {
-            this.ctx.service.ajax.error("账号密码错误", this.ctx.service.ajax.errorId("账号密码错误"))
+            this.ctx.service.ajax.error("账号密码错误", 1004) // this.ctx.service.ajax.errorId("账号密码错误")
         }
 
     }
@@ -59,6 +60,13 @@ class UserController extends Controller {
         } else {
             this.ctx.service.ajax.success({ "isUsed": false })
         }
+    }
+
+    async getUserInfo() {
+    }
+
+    errorLogin() {
+        this.ctx.service.ajax.error("登录信息失效，请重新登录", 1005)
     }
 
     hasThisName(name) {

@@ -1,9 +1,9 @@
-const Controller = require("egg").Controller
 
-class HomeController extends Controller {
-    common() {
-        this.ctx.service.ajax.success({})
-    }
+
+exports.index = ctx => {
+    ctx.service.ajax.success({ "a": 1 })
 }
 
-module.exports = HomeController
+exports.common = ctx => {
+    ctx.service.ajax.success({ "b": 2 })
+}
