@@ -117,7 +117,7 @@ function checkSignUpParam(data) {
         return "请填写密码"
     } else if (!data.name) {
         return "请填写名字"
-    } else if (data.name.length < 5) {
+    } else if (data.username.length < 5) {
         return "用户名不得少于5位"
     } else if (data.password.length < 6) {
         return "密码不得少于6位"
