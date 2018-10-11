@@ -8,6 +8,7 @@ const errorId = {
 }
 class Response extends Service {
     error(message, errorId) {
+        this.setCors()
         this.ctx.response.body = {
             "success": false,
             "data": {},
@@ -16,6 +17,7 @@ class Response extends Service {
         }
     }
     success(json = {}) {
+        this.setCors()
         this.ctx.response.body = {
             "success": true,
             "data": json,
@@ -23,6 +25,10 @@ class Response extends Service {
     }
     errorId(msg) {
         return errorId[msg] || "1000"
+    }
+    setCors() {
+        this.ctx.set("Access-Control-Allow-Origin", "*")
+        this.ctx.set("Access-Control-Allow-Methods", "GET, POST, PUT, OPTIONS, DELETE")
     }
 }
 
