@@ -28,25 +28,23 @@ class UserController extends Controller {
         }
     }
 
-    signin() {
+    async signin() {
         const data = this.ctx.request.body
-        if (this.isLogin()) {
+        const isRightSignInParam = checkSignInParam(data)
+        if (isRightSignInParam !== true) {
+            this.ctx.service.ajax.error(isRightSignInParam, this.ctx.service.ajax.errorId("请输入正确的登录信息"))
             return
         }
-        const isRightSignInParam = this.checkSignInParam(data)
-        if (isRightSignInParam) {
-            this.ctx.service.ajax.error("请输入正确的登录信息", this.ctx.service.ajax.errorId("请输入正确的登录信息"))
-            return
-        }
-
-        const signInAccount = this.signInAccount(data)
-        if (signInAccount) {
-            this.ctx.session.ck = "richole"
+        const account = await this.signInAccount(data)
+        if (account && account.length === 1) {
+            const id = account[0]._id.toString()
+            this.ctx.session.ck = this.service.ck.createCk(id)
+            this.ctx.session._userid = id
             this.ctx.service.ajax.success({
-                "ck": this.ctx.session.ck,
+                "message": "登录成功",
             })
         } else {
-
+            this.ctx.service.ajax.error("账号密码错误", this.ctx.service.ajax.errorId("账号密码错误"))
         }
 
     }
@@ -122,6 +120,15 @@ function checkSignUpParam(data) {
         return "用户名不得少于5位"
     } else if (data.password.length < 6) {
         return "密码不得少于6位"
+    }
+    return true
+}
+
+function checkSignInParam(data) {
+    if (!data.username) {
+        return "请填写用户名"
+    } else if (!data.password) {
+        return "请填写密码"
     }
     return true
 }

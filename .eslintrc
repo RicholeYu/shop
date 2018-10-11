@@ -10,6 +10,7 @@
         "after": false
     }],
     "quotes": ["error", "double"],
-    "quote-props": ["error", "always"]
+    "quote-props": ["error", "always"],
+    "no-debugger": [0]
   }
 }
