@@ -5,9 +5,8 @@
 module.exports = app => {
     const { router, controller } = app
 
-    router.post("/user/signin", controller.user.signin)
-    router.post("/user/signup", controller.user.signup)
-    router.get("/", controller.home.index)
-    router.get(/\/.*/, controller.home.common)
+    router.post("/user/sign_in", controller.user.signIn)
+    router.post("/user/sign_up", controller.user.signUp)
+    router.get("/user/check_username", controller.user.checkUsername)
     router.options(/\/.*/, controller.home.common)
 }

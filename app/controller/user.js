@@ -2,7 +2,7 @@ const Controller = require("egg").Controller
 const mongoose = require("mongoose")
 
 class UserController extends Controller {
-    async signup() {
+    async signUp() {
         const data = this.ctx.request.body
         const isRightSignUpParam = checkSignUpParam(data)
         if (this.ctx.sesion && this.ctx.session.ck) {
@@ -28,7 +28,7 @@ class UserController extends Controller {
         }
     }
 
-    async signin() {
+    async signIn() {
         const data = this.ctx.request.body
         const isRightSignInParam = checkSignInParam(data)
         if (isRightSignInParam !== true) {
@@ -48,6 +48,16 @@ class UserController extends Controller {
             this.ctx.service.ajax.error("账号密码错误", this.ctx.service.ajax.errorId("账号密码错误"))
         }
 
+    }
+
+    async checkUsername() {
+        const username = this.ctx.request.query.username
+        const isHasSameName = await this.hasThisName(username)
+        if (isHasSameName) {
+            this.ctx.service.ajax.success({ "isUsed": true })
+        } else {
+            this.ctx.service.ajax.success({ "isUsed": false })
+        }
     }
 
     hasThisName(name) {
