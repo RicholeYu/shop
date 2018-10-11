@@ -1,5 +1,4 @@
-"use strict"
-
+const mongoConfig = require("../mongo-config")
 module.exports = appInfo => {
     const config = exports = {}
 
@@ -10,7 +9,7 @@ module.exports = appInfo => {
     config.middleware = []
 
     config.mongoose = {
-        "url": "mongodb://root:ddainn1314@35.200.61.173:27017/shop?authSource=admin",
+        "url": `mongodb://${mongoConfig.user}:${mongoConfig.password}@${mongoConfig.host}:27017/${mongoConfig.db}?authSource=admin`,
         "options": { "useNewUrlParser": true },
     }
 

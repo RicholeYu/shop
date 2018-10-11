@@ -40,6 +40,7 @@ class UserController extends Controller {
             const id = account[0]._id.toString()
             this.ctx.session.ck = this.service.ck.createCk(id)
             this.ctx.session._userid = id
+            this.updateLoginTime(id)
             this.ctx.service.ajax.success({
                 "message": "登录成功",
                 "ck": this.ctx.session.ck,
@@ -85,7 +86,7 @@ class UserController extends Controller {
     }
 
     updateLoginTime(id) {
-        this.ctx.model.UserInfo.update({ "_id": mongoose.mongo.ObjectId(id) }, { "last_login_time": new Date() })
+        this.ctx.model.UserInfo.update({ "_id": mongoose.mongo.ObjectId(id) }, { "last_login_time": new Date() }, () => {})
     }
 
     updateCk() {
