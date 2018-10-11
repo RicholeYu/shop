@@ -29,6 +29,7 @@ class Response extends Service {
     setCors() {
         this.ctx.set("Access-Control-Allow-Origin", "*")
         this.ctx.set("Access-Control-Allow-Methods", "GET, POST, PUT, OPTIONS, DELETE")
+        this.ctx.set("Access-Control-Allow-Headers", "Accept, Cache-Control, Content-Type, Language")
     }
 }
 
