@@ -29,7 +29,6 @@ class UserController extends Controller {
     }
 
     async signIn() {
-        console.log(arguments)
         const data = this.ctx.request.body
         const isRightSignInParam = checkSignInParam(data)
         if (isRightSignInParam !== true) {

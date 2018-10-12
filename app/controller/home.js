@@ -1,9 +1,10 @@
 
+const Controller = require("egg").Controller
 
-exports.index = ctx => {
-    ctx.service.ajax.success({ "a": 1 })
+class HomeController extends Controller {
+    async getUserInfo(ctx) {
+        ctx.service.ajax.success({ "message": 'getUserInfo' })
+    }
 }
 
-exports.common = ctx => {
-    ctx.service.ajax.success({ "b": 2 })
-}
+module.exports = HomeController
