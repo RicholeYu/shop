@@ -9,5 +9,5 @@ module.exports = app => {
     router.post("/user/sign_up", controller.user.signUp)
     router.get("/user/check_username", controller.user.checkUsername)
 
-    router.get('/user/get_user_info', app.middleware.login, controller.home.getUserInfo)
+    router.get('/user/get_user_info', app.middleware.login, controller.user.getUserInfo)
 }

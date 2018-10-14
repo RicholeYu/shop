@@ -1,5 +1,4 @@
 module.exports = async (ctx, next) => {
-    console.log(ctx.session)
     if (ctx.session && ctx.session.ck) {
         await next()
         return
