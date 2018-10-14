@@ -8,6 +8,8 @@ module.exports = app => {
     router.post("/user/sign_in", controller.user.signIn)
     router.post("/user/sign_up", controller.user.signUp)
     router.get("/user/check_username", controller.user.checkUsername)
+    router.get("/user/sign_out", controller.user.signOut)
 
     router.get('/user/get_user_info', app.middleware.login, controller.user.getUserInfo)
+    router.options(/\/.*/, controller.home.common)
 }

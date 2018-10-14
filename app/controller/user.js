@@ -44,6 +44,7 @@ class UserController extends Controller {
             this.ctx.service.ajax.success({
                 "message": "登录成功",
                 "ck": this.ctx.session.ck,
+
             })
         } else {
             this.ctx.service.ajax.error("账号密码错误", 1004) // this.ctx.service.ajax.errorId("账号密码错误")
@@ -59,6 +60,11 @@ class UserController extends Controller {
         } else {
             this.ctx.service.ajax.success({ "isUsed": false })
         }
+    }
+
+    signOut () {
+      this.ctx.session = null
+      this.ctx.service.ajax.success({signout: true})
     }
 
     async getUserInfo() {
