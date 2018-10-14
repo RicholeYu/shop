@@ -62,29 +62,29 @@ class UserController extends Controller {
         }
     }
 
-    signOut () {
-      this.ctx.session = null
-      this.ctx.service.ajax.success({signout: true})
+    signOut() {
+        this.ctx.session = null
+        this.ctx.service.ajax.success({ "signout": true })
     }
 
     async getUserInfo() {
-      let ck = decodeURIComponent(this.ctx.query.ck)
-      let session = this.ctx.session
-      let userId = session.userId
-      if (ck && session.ck && userId && ck === session.ck && this.service.ck.isExpiredCk(userId, ck) === false) {
-        let account = await this.getAccountByUserId(userId)
-        if (account !== false) {
-          account = account[0].toJSON()
-          delete account.password
-          delete account.__v
-          account._id = account._id.toString()
-          this.ctx.service.ajax.success({...account})
+        const ck = decodeURIComponent(this.ctx.query.ck)
+        const session = this.ctx.session
+        const userId = session.userId
+        if (ck && session.ck && userId && ck === session.ck && this.service.ck.isExpiredCk(userId, ck) === false) {
+            let account = await this.getAccountByUserId(userId)
+            if (account !== false) {
+                account = account[0].toJSON()
+                delete account.password
+                delete account.__v
+                account._id = account._id.toString()
+                this.ctx.service.ajax.success(account)
+            } else {
+                this.ctx.service.ajax.error("获取账户信息失败", 1006)
+            }
         } else {
-          this.ctx.service.ajax.error("获取账户信息失败", 1006)
+            this.errorLogin()
         }
-      } else {
-        this.errorLogin()
-      }
     }
 
     errorLogin() {
@@ -103,16 +103,16 @@ class UserController extends Controller {
         })
     }
 
-    getAccountByUserId (userId) {
-      return new Promise(resolve => {
-          this.ctx.model.UserInfo.find({ "_id": mongoose.mongo.ObjectId(userId) }, (err, docs) => {
-              if (err || (docs && docs.length === 0)) {
-                  resolve(false)
-              } else {
-                  resolve(docs)
-              }
-          })
-      })
+    getAccountByUserId(userId) {
+        return new Promise(resolve => {
+            this.ctx.model.UserInfo.find({ "_id": mongoose.mongo.ObjectId(userId) }, (err, docs) => {
+                if (err || (docs && docs.length === 0)) {
+                    resolve(false)
+                } else {
+                    resolve(docs)
+                }
+            })
+        })
     }
 
     signInAccount(data) {
