@@ -27,9 +27,10 @@ class Response extends Service {
         return errorId[msg] || "1000"
     }
     setCors() {
-        this.ctx.set("Access-Control-Allow-Origin", "*")
+        this.ctx.set("Access-Control-Allow-Origin", this.ctx.request.headers.origin)
         this.ctx.set("Access-Control-Allow-Methods", "GET, POST, PUT, OPTIONS, DELETE")
         this.ctx.set("Access-Control-Allow-Headers", "Accept, Cache-Control, Content-Type, Language")
+        this.ctx.set("Access-Control-Allow-Credentials", "true")
     }
 }
 
