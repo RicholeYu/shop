@@ -35,7 +35,7 @@
     "lint": "eslint .",
     "ci": "npm run lint && npm run cov",
     "autod": "autod",
-    "restart": "npm stop && npm start"
+    "restart": "git pull origin master && npm stop && npm start"
   },
   "ci": {
     "version": "8"
