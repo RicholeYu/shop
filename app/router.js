@@ -5,11 +5,11 @@
 module.exports = app => {
     const { router, controller } = app
 
-    router.post("/user/sign_in", controller.user.signIn)
-    router.post("/user/sign_up", controller.user.signUp)
-    router.get("/user/check_username", controller.user.checkUsername)
-    router.get("/user/sign_out", controller.user.signOut)
+    router.post("/chat/user/sign_in", controller.user.signIn)
+    router.post("/chat/user/sign_up", controller.user.signUp)
+    router.get("/chat/user/check_username", controller.user.checkUsername)
+    router.get("/chat/user/sign_out", controller.user.signOut)
 
-    router.get('/user/get_user_info', app.middleware.login, controller.user.getUserInfo)
+    router.get('/chat/user/get_user_info', app.middleware.login, controller.user.getUserInfo)
     router.options(/\/.*/, controller.home.common)
 }

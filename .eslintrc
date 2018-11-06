@@ -1,16 +1,41 @@
 {
-  "extends": "eslint-config-egg",
-  "rules": {
-    "linebreak-style": [0],
-    "strict": [0],
-    "semi": ["error","never"],
-    "indent": ["error", 4],
-    "semi-spacing": [0, {
-        "before": false,
-        "after": false
-    }],
-    "quotes": [0],
-    "quote-props": ["error", "always"],
-    "no-debugger": [0]
-  }
+    "extends": "eslint-config-egg",
+    "rules": {
+        "linebreak-style": [
+            0
+        ],
+        "strict": [
+            0
+        ],
+        "semi": [
+            "error",
+            "never"
+        ],
+        "indent": [
+            "error",
+            4
+        ],
+        "semi-spacing": [
+            0,
+            {
+                "before": false,
+                "after": false
+            }
+        ],
+        "quotes": [
+            0
+        ],
+        "quote-props": [
+            "error",
+            "always"
+        ],
+        "no-debugger": [
+            0
+        ],
+        "comma-dangle": [
+            "error",
+            "never"
+        ],
+        "space-before-function-paren": ["error", "always"]
+    }
 }

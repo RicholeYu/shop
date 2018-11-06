@@ -4,29 +4,29 @@ const errorId = {
     "已拥有该用户名": 1002,
     "注册失败": 1003,
     "请输入正确的登录信息": 1004,
-    "账号密码错误": 1005,
+    "账号密码错误": 1005
 }
 class Response extends Service {
-    error(message, errorId) {
+    error (message, errorId) {
         this.setCors()
         this.ctx.response.body = {
             "success": false,
             "data": {},
             message,
-            errorId,
+            errorId
         }
     }
-    success(json = {}) {
+    success (json = {}) {
         this.setCors()
         this.ctx.response.body = {
             "success": true,
-            "data": json,
+            "data": json
         }
     }
-    errorId(msg) {
+    errorId (msg) {
         return errorId[msg] || "1000"
     }
-    setCors() {
+    setCors () {
         this.ctx.set("Access-Control-Allow-Origin", this.ctx.request.headers.origin)
         this.ctx.set("Access-Control-Allow-Methods", "GET, POST, PUT, OPTIONS, DELETE")
         this.ctx.set("Access-Control-Allow-Headers", "Accept, Cache-Control, Content-Type, Language")
