@@ -1,21 +1,21 @@
 const Controller = require("egg").Controller
 const mongoose = require("mongoose")
-
+const ERROR = require('../public/error')
 class UserController extends Controller {
     async signUp () {
         const data = this.ctx.request.body
         const isRightSignUpParam = checkSignUpParam(data)
         if (this.ctx.sesion && this.ctx.session.ck) {
-            this.ctx.service.ajax.error("你已登录", 1000) // this.ctx.service.ajax.errorId("注册信息验证不通过")
+            this.ctx.service.ajax.error("您已经登录啦", ERROR.ALREADY_LOGIN_IN)
             return
         }
         if (isRightSignUpParam !== true) {
-            this.ctx.service.ajax.error(isRightSignUpParam, 1000) // this.ctx.service.ajax.errorId("注册信息验证不通过")
+            this.ctx.service.ajax.error(isRightSignUpParam, ERROR.SIGN_UP_PARAMS_IS_WRONG)
             return
         }
-        const isHasSameName = await this.hasThisName(data.username)
-        if (isHasSameName) {
-            this.ctx.service.ajax.error("已拥有该用户名", 1001) // this.ctx.service.ajax.errorId("已拥有该用户名")
+        const isHasSameEmail = await this.hasThisEmail(data.email)
+        if (isHasSameEmail) {
+            this.ctx.service.ajax.error("已拥有该邮箱", ERROR.ALREADY_HAS_THIS_EMAIL)
             return
         }
         const isCreateSuccess = await this.createAccount(data)
@@ -24,7 +24,7 @@ class UserController extends Controller {
                 "message": "注册成功"
             })
         } else {
-            this.ctx.service.ajax.error("注册失败", 1002) // this.ctx.service.ajax.errorId("注册失败")
+            this.ctx.service.ajax.error("注册失败", ERROR.SIGN_UP_FAILED)
         }
     }
 
@@ -32,7 +32,7 @@ class UserController extends Controller {
         const data = this.ctx.request.body
         const isRightSignInParam = checkSignInParam(data)
         if (isRightSignInParam !== true) {
-            this.ctx.service.ajax.error(isRightSignInParam, 1003) // this.ctx.service.ajax.errorId("请输入正确的登录信息")
+            this.ctx.service.ajax.error(isRightSignInParam, ERROR.SIGN_IN_FAILED) // this.ctx.service.ajax.errorId("请输入正确的登录信息")
             return
         }
         const account = await this.signInAccount(data)
@@ -44,17 +44,15 @@ class UserController extends Controller {
             this.ctx.service.ajax.success({
                 "message": "登录成功",
                 "ck": this.ctx.session.ck
-
             })
         } else {
-            this.ctx.service.ajax.error("账号密码错误", 1004) // this.ctx.service.ajax.errorId("账号密码错误")
+            this.ctx.service.ajax.error("账号密码错误", ERROR.SIGN_IN_VERIFY_FAILED) // this.ctx.service.ajax.errorId("账号密码错误")
         }
-
     }
 
-    async checkUsername () {
-        const username = this.ctx.request.query.username
-        const isHasSameName = await this.hasThisName(username)
+    async checkEmail () {
+        const email = this.ctx.request.query.email
+        const isHasSameName = await this.hasThisEmail(email)
         if (isHasSameName) {
             this.ctx.service.ajax.success({ "isUsed": true })
         } else {
@@ -80,7 +78,7 @@ class UserController extends Controller {
                 account._id = account._id.toString()
                 this.ctx.service.ajax.success(account)
             } else {
-                this.ctx.service.ajax.error("获取账户信息失败", 1006)
+                this.ctx.service.ajax.error("获取账户信息失败", ERROR.GET_USER_INFO_FAILED)
             }
         } else {
             this.errorLogin()
@@ -88,12 +86,12 @@ class UserController extends Controller {
     }
 
     errorLogin () {
-        this.ctx.service.ajax.error("登录信息失效，请重新登录", 1005)
+        this.ctx.service.ajax.error("登录信息失效，请重新登录", ERROR.USER_TOKEN_EXPIRED)
     }
 
-    hasThisName (name) {
+    hasThisEmail (email) {
         return new Promise(resolve => {
-            this.ctx.model.UserInfo.find({ "username": name }, (err, docs) => {
+            this.ctx.model.UserInfo.find({ "email": email }, (err, docs) => {
                 if (err || (docs && docs.length !== 0)) {
                     resolve(true)
                 } else {
@@ -117,7 +115,7 @@ class UserController extends Controller {
 
     signInAccount (data) {
         return new Promise(resolve => {
-            this.ctx.model.UserInfo.find({ "username": data.username, "password": data.password }, (err, docs) => {
+            this.ctx.model.UserInfo.find({ "email": data.email, "password": data.password }, (err, docs) => {
                 if (err || (docs && docs.length === 0)) {
                     resolve(false)
                 } else {
@@ -146,9 +144,9 @@ class UserController extends Controller {
     createAccount (data) {
         return new Promise(resolve => {
             this.ctx.model.UserInfo.create({
-                "username": data.username,
+                "email": data.email,
                 "password": data.password,
-                "email": data.email
+                "name": data.name
             }, (err, docs) => {
                 if (err) {
                     resolve(false)
@@ -163,14 +161,13 @@ class UserController extends Controller {
 }
 
 function checkSignUpParam (data) {
-    if (!data.username) {
-        return "请填写用户名"
-    } else if (!data.password) {
+    const mailReg = /^[A-Za-z\d]+([-_.][A-Za-z\d]+)*@([A-Za-z\d]+[-.])+[A-Za-z\d]{2,4}$/
+    if (!data.password) {
         return "请填写密码"
-    } else if (!data.email) {
-        return "请输入邮箱"
-    } else if (data.username.length < 5) {
-        return "用户名不得少于5位"
+    } else if (!data.name) {
+        return "请输入昵称"
+    } else if (data.email && mailReg.test(data.email)) {
+        return "请输入正确的邮箱地址"
     } else if (data.password.length < 6) {
         return "密码不得少于6位"
     }
@@ -178,8 +175,8 @@ function checkSignUpParam (data) {
 }
 
 function checkSignInParam (data) {
-    if (!data.username) {
-        return "请填写用户名"
+    if (!data.email) {
+        return "请填写邮箱"
     } else if (!data.password) {
         return "请填写密码"
     }

@@ -10,23 +10,23 @@ module.exports = appInfo => {
 
     config.mongoose = {
         "url": `mongodb://${mongoConfig.user}:${mongoConfig.password}@${mongoConfig.host}:27017/${mongoConfig.db}?authSource=admin`,
-        "options": { "useNewUrlParser": true },
+        "options": { "useNewUrlParser": true }
     }
 
     config.security = {
         "csrf": {
-            "enable": false,
+            "enable": false
         },
         "xframe": {
-            "enable": false,
-        },
+            "enable": false
+        }
     }
 
     config.session = {
         "key": "shop",
         "maxAge": 24 * 3600 * 1000,
         "httpOnly": true,
-        "encrypt": true,
+        "encrypt": true
     }
 
     return config

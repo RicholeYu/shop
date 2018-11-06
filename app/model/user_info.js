@@ -4,12 +4,11 @@ module.exports = app => {
     const Schema = mongoose.Schema
 
     const UserSchema = new Schema({
-        "username": { "type": String },
         "password": { "type": String },
         "create_time": { "type": Date, "default": Date.now },
         "last_login_time": { "type": Date, "default": Date.now },
-        "email": { "type": String, "default": "" },
-        "name": { "type": String, "default": "" }
+        "email": { "type": String },
+        "name": { "type": String }
     })
 
     return mongoose.model("user_info", UserSchema, "user_info")
