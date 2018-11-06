@@ -25,7 +25,7 @@
     "node": ">=8.9.0"
   },
   "scripts": {
-    "start": "egg-scripts start --daemon --title=egg-server-shop",
+    "start": "egg-scripts start --daemon --title=egg-server-shop --port=9090",
     "stop": "egg-scripts stop --title=egg-server-shop",
     "dev": "egg-bin dev",
     "debug": "egg-bin debug",
