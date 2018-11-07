@@ -43,7 +43,8 @@ class UserController extends Controller {
             this.updateLoginTime(id)
             this.ctx.service.ajax.success({
                 "message": "登录成功",
-                "ck": this.ctx.session.ck
+                "ck": this.ctx.session.ck,
+                "name": account[0].name
             })
         } else {
             this.ctx.service.ajax.error("账号密码错误", ERROR.SIGN_IN_VERIFY_FAILED) // this.ctx.service.ajax.errorId("账号密码错误")
