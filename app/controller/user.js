@@ -166,7 +166,7 @@ function checkSignUpParam (data) {
         return "请填写密码"
     } else if (!data.name) {
         return "请输入昵称"
-    } else if (data.email && mailReg.test(data.email)) {
+    } else if (!(data.email && mailReg.test(data.email))) {
         return "请输入正确的邮箱地址"
     } else if (data.password.length < 6) {
         return "密码不得少于6位"
