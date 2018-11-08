@@ -3,6 +3,7 @@ const mongoose = require("mongoose")
 const ERROR = require('../public/error')
 class UserController extends Controller {
     async signUp () {
+        const time = Date.now()
         const data = this.ctx.request.body
         const isRightSignUpParam = checkSignUpParam(data)
         if (this.ctx.sesion && this.ctx.session.ck) {
@@ -21,7 +22,8 @@ class UserController extends Controller {
         const isCreateSuccess = await this.createAccount(data)
         if (isCreateSuccess) {
             this.ctx.service.ajax.success({
-                "message": "注册成功"
+                "message": "注册成功",
+                "time": Date.now() - time
             })
         } else {
             this.ctx.service.ajax.error("注册失败", ERROR.SIGN_UP_FAILED)
@@ -29,6 +31,7 @@ class UserController extends Controller {
     }
 
     async signIn () {
+        const time = Date.now()
         const data = this.ctx.request.body
         const isRightSignInParam = checkSignInParam(data)
         if (isRightSignInParam !== true) {
@@ -44,7 +47,8 @@ class UserController extends Controller {
             this.ctx.service.ajax.success({
                 "message": "登录成功",
                 "ck": this.ctx.session.ck,
-                "name": account[0].name
+                "name": account[0].name,
+                "time": Date.now() - time
             })
         } else {
             this.ctx.service.ajax.error("账号密码错误", ERROR.SIGN_IN_VERIFY_FAILED) // this.ctx.service.ajax.errorId("账号密码错误")
