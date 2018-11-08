@@ -3,7 +3,6 @@ const mongoose = require("mongoose")
 const ERROR = require('../public/error')
 class UserController extends Controller {
     async signUp () {
-        const time = Date.now()
         const data = this.ctx.request.body
         const isRightSignUpParam = checkSignUpParam(data)
         if (this.ctx.sesion && this.ctx.session.ck) {
@@ -22,8 +21,7 @@ class UserController extends Controller {
         const isCreateSuccess = await this.createAccount(data)
         if (isCreateSuccess) {
             this.ctx.service.ajax.success({
-                "message": "注册成功",
-                "time": Date.now() - time
+                "message": "注册成功"
             })
         } else {
             this.ctx.service.ajax.error("注册失败", ERROR.SIGN_UP_FAILED)
@@ -31,7 +29,6 @@ class UserController extends Controller {
     }
 
     async signIn () {
-        const time = Date.now()
         const data = this.ctx.request.body
         const isRightSignInParam = checkSignInParam(data)
         if (isRightSignInParam !== true) {
@@ -39,17 +36,17 @@ class UserController extends Controller {
             return
         }
         const account = await this.signInAccount(data)
-        if (account && account.length === 1) {
-            const id = account[0]._id.toString()
+        if (account) {
+            const id = account.toString()
             this.ctx.session.ck = this.service.ck.createCk(id)
             this.ctx.session.userId = id
-            this.updateLoginTime(id)
             this.ctx.service.ajax.success({
                 "message": "登录成功",
                 "ck": this.ctx.session.ck,
-                "name": account[0].name,
-                "time": Date.now() - time
+                "name": account.name,
+                "img": account.img
             })
+            this.updateLoginTime(id)
         } else {
             this.ctx.service.ajax.error("账号密码错误", ERROR.SIGN_IN_VERIFY_FAILED) // this.ctx.service.ajax.errorId("账号密码错误")
         }
@@ -124,10 +121,22 @@ class UserController extends Controller {
                 if (err || (docs && docs.length === 0)) {
                     resolve(false)
                 } else {
-                    resolve(docs)
+                    resolve(docs[0].toJSON())
                 }
             })
         })
+    }
+
+    async uploadHeadImg () {
+        const stream = await this.ctx.getFileStream()
+        const result = await this.ctx.service.file.saveHeadImg(stream, this.ctx.session.userId)
+        if (result === false) {
+            this.ctx.service.ajax.error("上传头像失败", ERROR.ERROR_UPLOAD_IMG)
+        } else {
+            this.ctx.service.ajax.success({
+                "message": "上传头像成功"
+            })
+        }
     }
 
     updateLoginTime (id) {

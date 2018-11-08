@@ -6,3 +6,4 @@ exports.SIGN_IN_FAILED = 10005 // 登录信息不正确
 exports.SIGN_IN_VERIFY_FAILED = 10006 // 登录信息不正确
 exports.GET_USER_INFO_FAILED = 10007 // 获取账号信息失败
 exports.USER_TOKEN_EXPIRED = 10008 // 登录信息失效，需要重新登录
+exports.ERROR_UPLOAD_IMG = 10009 // 登录信息失效，需要重新登录

@@ -29,6 +29,10 @@ module.exports = appInfo => {
         "encrypt": true
     }
 
+    config.multipart = {
+        "fileExtensions": [ '.txt' ] // 增加对 txt 扩展名的文件支持
+    }
+
     return config
 }
 
