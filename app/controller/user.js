@@ -131,21 +131,26 @@ class UserController extends Controller {
 
     async uploadHeadImg () {
         const id = this.ctx.session.userId
-        const stream = await this.ctx.getFileStream()
-        const result = await this.ctx.service.file.saveHeadImg(stream, id, this.config.uploadPath)
-        if (result === 2) {
-            this.ctx.service.ajax.error("上传头像失败", ERROR.ERROR_UPLOAD_IMG)
-        } else if (result === 1) {
-            this.ctx.service.ajax.error("仅支持png和jpg图片", ERROR.ERROR_UPLOAD_IMG_TYPE)
-        } else if (result === 0) {
-            this.ctx.service.ajax.error("上传图片参数错误", ERROR.ERROR_UPLOAD_IMG_PARAMS)
-        } else {
-            const srcPath = `https://richole.cn/upload/${result}`
-            const res = await this.updateUserImg(id, srcPath)
-            res ? this.ctx.service.ajax.success({
-                "message": "上传头像成功",
-                "src": srcPath
-            }) : this.ctx.service.ajax.error("更新头像失败", ERROR.ERROR_UPDATE_IMG)
+        let stream
+        try {
+            stream = await this.ctx.getFileStream()
+            const result = await this.ctx.service.file.saveHeadImg(stream, id, this.config.uploadPath)
+            if (result === 2) {
+                this.ctx.service.ajax.error("上传头像失败", ERROR.ERROR_UPLOAD_IMG)
+            } else if (result === 1) {
+                this.ctx.service.ajax.error("仅支持png和jpg图片", ERROR.ERROR_UPLOAD_IMG_TYPE)
+            } else if (result === 0) {
+                this.ctx.service.ajax.error("上传图片参数错误", ERROR.ERROR_UPLOAD_IMG_PARAMS)
+            } else {
+                const srcPath = `https://richole.cn/upload/${result}`
+                const res = await this.updateUserImg(id, srcPath)
+                res ? this.ctx.service.ajax.success({
+                    "message": "上传头像成功",
+                    "src": srcPath
+                }) : this.ctx.service.ajax.error("更新头像失败", ERROR.ERROR_UPDATE_IMG)
+            }
+        } catch (e) {
+            this.ctx.service.ajax.error(`错误:${e.toString()}`, ERROR.ERROR_UPLOAD_IMG)
         }
     }
 
