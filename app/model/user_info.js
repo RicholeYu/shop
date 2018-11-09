@@ -10,7 +10,7 @@ module.exports = app => {
         "email": { "type": String },
         "name": { "type": String },
         "sex": { "type": String, "default": "male" },
-        "img": { "type": String, "default": "https://richole.cn/upload/default.png" }
+        "image": { "type": String, "default": "https://richole.cn/upload/default.png" }
     })
 
     return mongoose.model("user_info", UserSchema, "user_info")

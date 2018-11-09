@@ -161,7 +161,7 @@ class UserController extends Controller {
 
     updateUserImg (id, pathname) {
         return new Promise(resolve => {
-            this.ctx.model.UserInfo.update({ "_id": mongoose.mongo.ObjectId(id) }, { "img": pathname }, (err, docs) => {
+            this.ctx.model.UserInfo.update({ "_id": mongoose.mongo.ObjectId(id) }, { "image": pathname }, (err, docs) => {
                 console.log(err, docs)
                 if (err) {
                     resolve(false)
