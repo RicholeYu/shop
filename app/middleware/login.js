@@ -1,5 +1,5 @@
 module.exports = async (ctx, next) => {
-    if (ctx.session && ctx.session.ck) {
+    if (ctx.session && ctx.session.ck && ctx.session.userId && !ctx.service.ck.isExpiredCk(ctx.session.userId, ctx.session.ck)) {
         await next()
         return
     }

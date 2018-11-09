@@ -1,4 +1,13 @@
-const mongoConfig = require("../mongo-config")
+const mongoConfig = {
+    "user": "root",
+    "password": "ddainn1314",
+    "host": "127.0.0.1",
+    // "host": "richole.cn",
+    "db": "shop"
+}
+
+const uploadPath = "/var/www/web/upload"
+
 module.exports = appInfo => {
     const config = exports = {}
 
@@ -32,6 +41,8 @@ module.exports = appInfo => {
     config.multipart = {
         "fileExtensions": [ '.txt' ] // 增加对 txt 扩展名的文件支持
     }
+
+    config.uploadPath = uploadPath
 
     return config
 }

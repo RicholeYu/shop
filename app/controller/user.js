@@ -5,10 +5,10 @@ class UserController extends Controller {
     async signUp () {
         const data = this.ctx.request.body
         const isRightSignUpParam = checkSignUpParam(data)
-        if (this.ctx.sesion && this.ctx.session.ck) {
-            this.ctx.service.ajax.error("您已经登录啦", ERROR.ALREADY_LOGIN_IN)
-            return
-        }
+        // if (this.ctx.sesion && this.ctx.session.ck) {
+        //     this.ctx.service.ajax.error("您已经登录了", ERROR.ALREADY_LOGIN_IN)
+        //     return
+        // }
         if (isRightSignUpParam !== true) {
             this.ctx.service.ajax.error(isRightSignUpParam, ERROR.SIGN_UP_PARAMS_IS_WRONG)
             return
@@ -32,12 +32,12 @@ class UserController extends Controller {
         const data = this.ctx.request.body
         const isRightSignInParam = checkSignInParam(data)
         if (isRightSignInParam !== true) {
-            this.ctx.service.ajax.error(isRightSignInParam, ERROR.SIGN_IN_FAILED) // this.ctx.service.ajax.errorId("请输入正确的登录信息")
+            this.ctx.service.ajax.error(isRightSignInParam, ERROR.SIGN_IN_FAILED)
             return
         }
         const account = await this.signInAccount(data)
-        if (account) {
-            const id = account.toString()
+        if (account && account.password === data.password) {
+            const id = account._id.toString()
             this.ctx.session.ck = this.service.ck.createCk(id)
             this.ctx.session.userId = id
             this.ctx.service.ajax.success({
@@ -47,8 +47,10 @@ class UserController extends Controller {
                 "img": account.img
             })
             this.updateLoginTime(id)
+        } else if (!account) {
+            this.ctx.service.ajax.error("不存在该账户", ERROR.NO_THIS_ACCOUNT)
         } else {
-            this.ctx.service.ajax.error("账号密码错误", ERROR.SIGN_IN_VERIFY_FAILED) // this.ctx.service.ajax.errorId("账号密码错误")
+            this.ctx.service.ajax.error("账号密码错误", ERROR.SIGN_IN_VERIFY_FAILED)
         }
     }
 
@@ -117,7 +119,7 @@ class UserController extends Controller {
 
     signInAccount (data) {
         return new Promise(resolve => {
-            this.ctx.model.UserInfo.find({ "email": data.email, "password": data.password }, (err, docs) => {
+            this.ctx.model.UserInfo.find({ "email": data.email }, (err, docs) => {
                 if (err || (docs && docs.length === 0)) {
                     resolve(false)
                 } else {
@@ -128,15 +130,34 @@ class UserController extends Controller {
     }
 
     async uploadHeadImg () {
+        const id = this.ctx.session.userId
         const stream = await this.ctx.getFileStream()
-        const result = await this.ctx.service.file.saveHeadImg(stream, this.ctx.session.userId)
-        if (result === false) {
+        const result = await this.ctx.service.file.saveHeadImg(stream, id, this.config.uploadPath)
+        if (result === 2) {
             this.ctx.service.ajax.error("上传头像失败", ERROR.ERROR_UPLOAD_IMG)
+        } else if (result === 1) {
+            this.ctx.service.ajax.error("仅支持png和jpg图片", ERROR.ERROR_UPLOAD_IMG_TYPE)
         } else {
-            this.ctx.service.ajax.success({
-                "message": "上传头像成功"
-            })
+            const srcPath = `https://richole.cn/upload/${result}`
+            const res = await this.updateUserImg(id, srcPath)
+            res ? this.ctx.service.ajax.success({
+                "message": "上传头像成功",
+                "src": srcPath
+            }) : this.ctx.service.ajax.error("更新头像失败", ERROR.ERROR_UPDATE_IMG)
         }
+    }
+
+    updateUserImg (id, pathname) {
+        return new Promise(resolve => {
+            this.ctx.model.UserInfo.update({ "_id": mongoose.mongo.ObjectId(id) }, { "img": pathname }, (err, docs) => {
+                console.log(err, docs)
+                if (err) {
+                    resolve(false)
+                }
+                resolve(true)
+            })
+        })
+
     }
 
     updateLoginTime (id) {
