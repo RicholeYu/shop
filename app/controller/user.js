@@ -137,6 +137,8 @@ class UserController extends Controller {
             this.ctx.service.ajax.error("上传头像失败", ERROR.ERROR_UPLOAD_IMG)
         } else if (result === 1) {
             this.ctx.service.ajax.error("仅支持png和jpg图片", ERROR.ERROR_UPLOAD_IMG_TYPE)
+        } else if (result === 0) {
+            this.ctx.service.ajax.error("上传图片参数错误", ERROR.ERROR_UPLOAD_IMG_PARAMS)
         } else {
             const srcPath = `https://richole.cn/upload/${result}`
             const res = await this.updateUserImg(id, srcPath)

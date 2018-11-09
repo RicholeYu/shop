@@ -5,8 +5,11 @@ class File extends Service {
     saveHeadImg (fileStream, id, uploadPath) {
         return new Promise(resolve => {
             const allowMime = [ 'image/jpeg', 'image/png' ]
+            if (fileStream.fieldname !== "head_img") {
+                resolve(0)
+            }
             if (allowMime.indexOf(fileStream.mimeType) === '-1') {
-                Promise.reject(1)
+                resolve(1)
             }
             const type = fileStream.mimeType.split('/')[1] || 'jpg'
             const name = `${id}_head.${type}`
