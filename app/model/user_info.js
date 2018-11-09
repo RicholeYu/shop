@@ -9,6 +9,7 @@ module.exports = app => {
         "last_login_time": { "type": Date, "default": Date.now },
         "email": { "type": String },
         "name": { "type": String },
+        "sex": { "type": String, "default": "male" },
         "img": { "type": String, "default": "https://richole.cn/upload/default.png" }
     })
 

@@ -40,11 +40,16 @@ class UserController extends Controller {
             const id = account._id.toString()
             this.ctx.session.ck = this.service.ck.createCk(id)
             this.ctx.session.userId = id
+            delete account.__v
+            delete account.password
             this.ctx.service.ajax.success({
                 "message": "登录成功",
                 "ck": this.ctx.session.ck,
-                "name": account.name,
-                "img": account.img
+                userInfo: {
+                    ...account,
+                    _id: id
+                }
+                
             })
             this.updateLoginTime(id)
         } else if (!account) {
