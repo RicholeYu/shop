@@ -94,11 +94,29 @@ class UserController extends Controller {
         }
     }
 
-    getUsers () {
-        this.ctx.model.UserInfo.find({}, (err, docs) => {
-            console.log(docs)
-            this.ctx.service.ajax.success({
-                "data": docs
+    async getUsers () {
+        const result = await this.getUsersList()
+        if (result === 0) {
+            this.tx.service.ajax.error("获取用户列表失败", ERROR.GET_USERS_LIST)
+            return 
+        }
+        this.ctx.service.ajax.success(result)
+    }
+
+    getUsersList () {
+        return new Promise (resolve => {
+            this.ctx.model.UserInfo.find({}, async (err, docs) => {
+                if (err) {
+                    resolve(0)
+                    return
+                }
+                let data = docs.map(doc => {
+                    let thisDoc = doc.toJSON()
+                    delete thisDoc.password
+                    delete thisDoc.__v
+                    return thisDoc
+                })
+                resolve(data)
             })
         })
     }

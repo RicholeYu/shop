@@ -12,3 +12,4 @@ exports.NO_THIS_ACCOUNT = 10011 // 不存在该账户
 exports.ERROR_UPDATE_IMG = 10012 // 更新头像失败
 exports.ERROR_UPLOAD_IMG_PARAMS = 10013 // 上传图片参数错误
 exports.ERROR_UPLOAD_NO_IMG = 10014 // 请求不包含上传图片
+exports.GET_USERS_LIST = 10015 // 获取用户列表失败
