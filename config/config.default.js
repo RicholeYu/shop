@@ -6,6 +6,12 @@ const mongoConfig = {
     "db": "shop"
 }
 
+const redisConfig = {
+    "host": "127.0.0.1",
+    // "host": "richole.cn",
+    "password": "ddainn1314"
+}
+
 const uploadPath = "/var/www/web/upload"
 
 module.exports = appInfo => {
@@ -37,7 +43,33 @@ module.exports = appInfo => {
         "httpOnly": true,
         "encrypt": true
     }
-
+    config.redis = { 
+        client: { 
+            port: 6379, // Redis port 
+            host: redisConfig.host, // Redis host 
+            password: redisConfig.password, 
+            db: 0, 
+        }, 
+    }
+    config.io = {
+        init: { },
+        redis: {
+            host: redisConfig.host,
+            port: 6379,
+            auth_pass: redisConfig.password,
+            db: 0,
+        },
+        namespace: {
+            '/': {
+                connectionMiddleware: [],
+                packetMiddleware: [],
+            },
+            '/send': {
+                connectionMiddleware: [],
+                packetMiddleware: [],
+            }
+        },
+    }
     config.multipart = {
         "fileExtensions": [ '.txt' ] // 增加对 txt 扩展名的文件支持
     }
