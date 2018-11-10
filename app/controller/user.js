@@ -87,6 +87,15 @@ class UserController extends Controller {
         }
     }
 
+    getUsers () {
+        this.ctx.model.UserInfo.find({}, (err, docs) => {
+            console.log(docs)
+            this.ctx.service.ajax.success({
+                "data": docs
+            })
+        })
+    }
+
     errorLogin () {
         this.ctx.service.ajax.error("登录信息失效，请重新登录", ERROR.USER_TOKEN_EXPIRED)
     }
