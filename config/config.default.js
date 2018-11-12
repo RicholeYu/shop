@@ -1,8 +1,8 @@
 const mongoConfig = {
     "user": "root",
     "password": "ddainn1314",
-    // "host": "127.0.0.1",
-    "host": "richole.cn",
+    "host": "127.0.0.1",
+    // "host": "richole.cn",
     "db": "shop"
 }
 
@@ -43,32 +43,32 @@ module.exports = appInfo => {
         "httpOnly": true,
         "encrypt": true
     }
-    config.redis = { 
-        client: { 
-            port: 6379, // Redis port 
-            host: redisConfig.host, // Redis host 
-            password: redisConfig.password, 
-            db: 0, 
-        }, 
+    config.redis = {
+        "client": {
+            "port": 6379, // Redis port
+            "host": redisConfig.host, // Redis host
+            "password": redisConfig.password,
+            "db": 0
+        }
     }
     config.io = {
-        init: { },
-        redis: {
-            host: redisConfig.host,
-            port: 6379,
-            auth_pass: redisConfig.password,
-            db: 0,
+        "init": { },
+        "redis": {
+            "host": redisConfig.host,
+            "port": 6379,
+            "auth_pass": redisConfig.password,
+            "db": 0
         },
-        namespace: {
+        "namespace": {
             '/': {
-                connectionMiddleware: [],
-                packetMiddleware: [],
+                "connectionMiddleware": [],
+                "packetMiddleware": []
             },
             '/send': {
-                connectionMiddleware: [],
-                packetMiddleware: [],
+                "connectionMiddleware": [],
+                "packetMiddleware": []
             }
-        },
+        }
     }
     config.multipart = {
         "fileExtensions": [ '.txt' ] // 增加对 txt 扩展名的文件支持
