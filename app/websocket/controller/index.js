@@ -7,7 +7,8 @@ const controller = {
             connect.__isLogin = true
             connect.__userId = authResult
             this.websocket.success(connect, {
-                "message": "登录成功"
+                "message": "登录成功",
+                "type": "login"
             })
         } else {
             connect.__isLogin = false
@@ -33,10 +34,15 @@ const controller = {
         if (userConnect) {
             this.websocket.send(userConnect, {
                 "message": data.message || '',
-                "user_id": connect.__userId
+                "user_id": connect.__userId,
+                "type": "message"
+            })
+            this.websocket.success(connect, {
+                "message": "消息发送成功",
+                "type": "send_message"
             })
         } else {
-            this.websocket.error(connect, "消息发送失败", ERROR.WS_SEND_ERROR)
+            this.websocket.error(connect, "当前用户尚未上线，消息发送失败", ERROR.WS_SEND_ERROR)
         }
     }
 }
