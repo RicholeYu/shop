@@ -10,10 +10,6 @@ exports.mongoose = {
 
 exports.session = true
 
-exports.io = {
-    "enable": true,
-    "package": 'egg-socket.io'
-}
 
 exports.redis = {
     "enable": true,

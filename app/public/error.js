@@ -13,3 +13,13 @@ exports.ERROR_UPDATE_IMG = 10012 // 更新头像失败
 exports.ERROR_UPLOAD_IMG_PARAMS = 10013 // 上传图片参数错误
 exports.ERROR_UPLOAD_NO_IMG = 10014 // 请求不包含上传图片
 exports.GET_USERS_LIST = 10015 // 获取用户列表失败
+
+
+exports.WS_NOT_VERIFY_ACCOUNT = 20001 // Websocket链接尚未验证身份
+exports.WS_JSON_FOTMATE_ERROR = 20002 // JSON格式错误，请输入正确的JSON格式
+exports.WS_JSON_ERROR = 20003 // JSON解析错误，请输入正确的JSON字符串
+exports.WS_LOGIN_FAILED = 20004 // 登录失败, 账号密码错误
+exports.WS_LACK_OF_USERID = 20005 // 缺少user_id
+exports.WS_LACK_OF_MESSAGE = 20006 // 缺少message
+exports.WS_FOOLISH = 20007 // 不能给自己发消息
+exports.WS_SEND_ERROR = 20008 // 消息发送失败

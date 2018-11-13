@@ -51,25 +51,6 @@ module.exports = appInfo => {
             "db": 0
         }
     }
-    config.io = {
-        "init": { },
-        "redis": {
-            "host": redisConfig.host,
-            "port": 6379,
-            "auth_pass": redisConfig.password,
-            "db": 0
-        },
-        "namespace": {
-            '/': {
-                "connectionMiddleware": [],
-                "packetMiddleware": []
-            },
-            '/send': {
-                "connectionMiddleware": [],
-                "packetMiddleware": []
-            }
-        }
-    }
     config.multipart = {
         "fileExtensions": [ '.txt' ] // 增加对 txt 扩展名的文件支持
     }
