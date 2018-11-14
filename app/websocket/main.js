@@ -22,7 +22,7 @@ module.exports = {
                         data = JSON.parse(data)
                         const type = data.type
                         if (type && typeof type === 'string') {
-                            if (!this.isLogin(connect) && type !== 'login') {
+                            if (type !== 'login' && type !== 'ping' && !this.isLogin(connect)) {
                                 this.error(connect, "Websocket链接尚未验证身份", ERROR.WS_NOT_VERIFY_ACCOUNT)
                                 return
                             }

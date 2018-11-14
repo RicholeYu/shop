@@ -45,6 +45,10 @@ const controller = {
         } else {
             this.websocket.error(connect, "当前用户尚未上线，消息发送失败", ERROR.WS_SEND_ERROR)
         }
+    },
+
+    ping (connect) {
+        this.websocket.send(connect, { "message": "pong" })
     }
 }
 
