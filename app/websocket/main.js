@@ -36,9 +36,18 @@ module.exports = {
                     }
                 })
             })
+            wss.on('close', connect => {
+                console.log(connect)
+            })
+
+            setInterval(this.removeDisconnectSocket, 30000)
         },
         send (connect, data) {
-            connect && connect.send(JSON.stringify(data))
+            try {
+                connect && connect.send(JSON.stringify(data))
+            } catch (e) {
+                // 消息发送失败
+            }
         },
         error (connect, message, errorId) {
             this.send(connect, {
@@ -59,6 +68,18 @@ module.exports = {
         },
         isLogin (connect) {
             return connect.__isLogin
+        },
+        removeSameConnect (connect, id) {
+            vm.sockets = vm.sockets.filter(con => {
+                const isSameUser = (con !== connect && id === con.__userId)
+                if (isSameUser) {
+                    con.close()
+                }
+                return !isSameUser
+            })
+        },
+        removeDisconnectSocket () {
+            vm.sockets = vm.sockets.filter(con => con.readyState === 1)
         }
     },
     "sockets": []

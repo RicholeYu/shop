@@ -6,9 +6,10 @@ const controller = {
         if (authResult) {
             connect.__isLogin = true
             connect.__userId = authResult
-            this.websocket.success(connect, {
-                "message": "登录成功",
-                "type": "login"
+            this.websocket.removeSameConnect(connect, connect.__userId)
+            this.websocket.sendAll({
+                "type": "login",
+                "user_id": connect.__userId
             })
         } else {
             connect.__isLogin = false

@@ -106,6 +106,7 @@ class UserController extends Controller {
     getUsersList () {
         return new Promise (resolve => {
             this.ctx.model.UserInfo.find({}, async (err, docs) => {
+                this.loginIds = this.ctx.app.sockets.map(connect => connect.__userId)
                 if (err) {
                     resolve(0)
                     return
@@ -114,6 +115,8 @@ class UserController extends Controller {
                     let thisDoc = doc.toJSON()
                     delete thisDoc.password
                     delete thisDoc.__v
+                    thisDoc._id = thisDoc._id.toString()
+                    thisDoc.isLogin = this.loginIds.indexOf(thisDoc._id) >= 0
                     return thisDoc
                 })
                 resolve(data)
