@@ -48,7 +48,7 @@ const controller = {
     },
 
     ping (connect) {
-        this.websocket.send(connect, { "message": "pong" })
+        this.websocket.send(connect, { "message": "pong", "type": "pong" })
     }
 }
 
