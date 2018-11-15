@@ -1,8 +1,8 @@
 const mongoConfig = {
     "user": "root",
     "password": "ddainn1314",
-    // "host": "127.0.0.1",
-    "host": "richole.cn",
+    "host": "127.0.0.1",
+    // "host": "richole.cn",
     "db": "shop"
 }
 

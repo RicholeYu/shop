@@ -36,11 +36,7 @@ module.exports = {
                     }
                 })
             })
-            wss.on('close', connect => {
-                console.log(connect)
-            })
-
-            setInterval(this.removeDisconnectSocket, 30000)
+            setInterval(this.removeDisconnectSocket, 15000)
         },
         send (connect, data) {
             try {
@@ -79,7 +75,15 @@ module.exports = {
             })
         },
         removeDisconnectSocket () {
-            vm.sockets = vm.sockets.filter(con => con.readyState === 1)
+            const disconnectIds = []
+            vm.sockets = vm.sockets.filter(con => {
+                const isAlive = con.readyState === 1
+                if (!isAlive) {
+                    disconnectIds.push(con.__userId)
+                }
+                return isAlive
+            })
+            disconnectIds.forEach(id => vm.websocket.sendAll({ "type": "logout", "user_id": id }))
         }
     },
     "sockets": []
